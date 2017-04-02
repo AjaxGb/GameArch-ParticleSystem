@@ -13,6 +13,7 @@
 #include "framework/ga_sim.h"
 #include "framework/ga_output.h"
 #include "jobs/ga_job.h"
+#include "gui/ga_font.h"
 
 #include "entity/ga_entity.h"
 #include "entity/ga_lua_component.h"
@@ -29,6 +30,8 @@
 #if defined(GA_MINGW)
 #include <unistd.h>
 #endif
+
+ga_font* g_font = nullptr;
 
 static void set_root_path(const char* exepath);
 
@@ -57,6 +60,9 @@ int main(int argc, const char** argv)
 	ga_lua_component lua_move(&lua, "data/scripts/move.lua");
 	ga_cube_component lua_model(&lua, "data/textures/rpi.png");
 	sim->add_entity(&lua);
+
+	// Create the default font:
+	g_font = new ga_font("VeraMono.ttf", 16.0f, 512, 512);
 
 	// Main loop:
 	while (true)
