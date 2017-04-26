@@ -25,7 +25,7 @@ ga_checkbox::ga_checkbox(bool state, const char* text, float x, float y, ga_fram
 		params->_mouse_y >= top   &&
 		params->_mouse_y <= bottom;
 	bool pressed = mouseover && params->_mouse_press_mask;
-	_clicked = mouseover && params->_mouse_click_mask;
+	bool clicked = mouseover && params->_mouse_click_mask;
 
 	// DRAW BOX
 	//   x
@@ -59,7 +59,10 @@ ga_checkbox::ga_checkbox(bool state, const char* text, float x, float y, ga_fram
 	extern ga_font* g_font;
 	g_font->print(params, text, right + 3, bottom - 1, k_color_text);
 
-	if (_clicked ? !state : state)
+	if (clicked) state = !state;
+	_checked = state;
+
+	if (state)
 	{
 		// DRAW CROSS
 		//   x
@@ -90,7 +93,7 @@ ga_checkbox::ga_checkbox(bool state, const char* text, float x, float y, ga_fram
 	}
 }
 
-bool ga_checkbox::get_clicked(const ga_frame_params* params) const
+bool ga_checkbox::get_checked() const
 {
-	return _clicked;
+	return _checked;
 }

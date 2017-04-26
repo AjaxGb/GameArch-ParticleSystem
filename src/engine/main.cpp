@@ -18,7 +18,7 @@
 #include "entity/ga_entity.h"
 #include "entity/ga_lua_component.h"
 
-#include "graphics/ga_cube_component.h"
+#include "graphics/ga_particles_component.h"
 #include "graphics/ga_program.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -54,15 +54,16 @@ int main(int argc, const char** argv)
 	rotation.make_axis_angle(ga_vec3f::x_vector(), ga_degrees_to_radians(15.0f));
 	camera->rotate(rotation);
 
-	// Create an entity whose movement is driven by Lua script.
-	ga_entity lua;
-	lua.translate({ 0.0f, 2.0f, 1.0f });
-	ga_lua_component lua_move(&lua, "data/scripts/move.lua");
-	ga_cube_component lua_model(&lua, "data/textures/rpi.png");
-	sim->add_entity(&lua);
-
 	// Create the default font:
 	g_font = new ga_font("VeraMono.ttf", 16.0f, 512, 512);
+
+	// Create a particle system whose movement is driven by Lua script.
+	ga_entity particle_lua;
+	particle_lua.translate({ 0.0f, 2.0f, 1.0f });
+	ga_lua_component lua_move(&particle_lua, "data/scripts/move.lua");
+	ga_particles_component particle_system(&particle_lua, "data/textures/rpi.png");
+	particle_system._draw_gui = true;
+	sim->add_entity(&particle_lua);
 
 	// Main loop:
 	while (true)

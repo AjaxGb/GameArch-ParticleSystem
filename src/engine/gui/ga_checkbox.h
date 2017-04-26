@@ -21,7 +21,7 @@ class ga_checkbox : public ga_widget
 public:
 	ga_checkbox(bool state, const char* text, float x, float y, struct ga_frame_params* params);
 
-	bool get_clicked(const struct ga_frame_params* params) const;
+	bool get_checked() const;
 private:
-	bool _clicked;
+	bool _checked;
 };

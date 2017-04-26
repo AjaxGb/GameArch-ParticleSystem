@@ -14,14 +14,16 @@
 #include "math/ga_vec2f.h"
 
 /*
-** GUI pressable button widget.
+** GUI slider widget.
 */
-class ga_button : public ga_widget
+class ga_slider : public ga_widget
 {
 public:
-	ga_button(const char* text, float x, float y, struct ga_frame_params* params);
+	ga_slider(float min, float max, float current,
+		float x, float y, float width, float height,
+		struct ga_frame_params* params);
 
-	bool get_clicked() const;
+	float get_value() const;
 private:
-	bool _clicked;
+	float _value;
 };

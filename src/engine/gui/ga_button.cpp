@@ -8,8 +8,6 @@
 */
 
 #include "ga_button.h"
-
-#include "framework/ga_frame_params.h"
 #include "ga_font.h"
 
 ga_button::ga_button(const char* text, float x, float y, ga_frame_params* params)
@@ -91,7 +89,7 @@ ga_button::ga_button(const char* text, float x, float y, ga_frame_params* params
 	params->_gui_drawcall_lock.clear(std::memory_order_release);
 }
 
-bool ga_button::get_clicked(const ga_frame_params* params) const
+bool ga_button::get_clicked() const
 {
 	return _clicked;
 }
