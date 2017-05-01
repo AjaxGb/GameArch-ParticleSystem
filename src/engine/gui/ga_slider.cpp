@@ -48,11 +48,11 @@ ga_slider::ga_slider(float min, float max, float current,
 	if (pressed)
 	{
 		slider_left = fmaxf(left, fminf(right - slider_width, params->_mouse_x - slider_offset));
-		_value = fmaxf(min, fminf(max, (params->_mouse_x - slider_offset - left) / (width - slider_width) * (max - min)));
+		_value = fmaxf(min, fminf(max, min + (params->_mouse_x - slider_offset - left) / (width - slider_width) * (max - min)));
 	}
 	else
 	{
-		slider_left = left + ((width - slider_width) * current / (max - min));
+		slider_left = left + ((width - slider_width) * (current - min) / (max - min));
 		_value = current;
 	}
 

@@ -53,3 +53,27 @@ struct ga_dynamic_drawcall : ga_drawcall
 	std::vector<uint16_t> _indices;
 	ga_vec3f _color;
 };
+
+/*
+** Holds the information needed to stream new data to a buffer at draw time.
+**/
+struct ga_data_stream
+{
+	GLuint _vbo;
+	GLsizeiptr _max_size;
+	GLsizeiptr _curr_size;
+	GLvoid * _source;
+};
+
+/*
+** Draw call with instanced geometry.
+** The vertex array object referenced by this draw call should live for at
+** least several frames, and probably longer.
+*/
+struct ga_instanced_drawcall : ga_drawcall
+{
+	GLuint _vao;
+	GLsizei _index_count;
+	GLsizei _instance_count;
+	std::vector<ga_data_stream> _streams;
+};

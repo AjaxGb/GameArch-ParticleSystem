@@ -79,8 +79,12 @@ struct ga_frame_params
 	std::vector<ga_dynamic_drawcall> _dynamic_drawcalls;
 	std::atomic_flag _dynamic_drawcall_lock = ATOMIC_FLAG_INIT;
 
+	std::vector<ga_instanced_drawcall> _instanced_drawcalls;
+	std::atomic_flag _instanced_drawcall_lock = ATOMIC_FLAG_INIT;
+
 	std::vector<ga_dynamic_drawcall> _gui_drawcalls;
 	std::atomic_flag _gui_drawcall_lock = ATOMIC_FLAG_INIT;
 
+	ga_vec3f _camera_pos;
 	ga_mat4f _view;
 };

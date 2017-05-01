@@ -17,8 +17,8 @@
 
 #include "entity/ga_entity.h"
 #include "entity/ga_lua_component.h"
-
 #include "graphics/ga_particles_component.h"
+#include "graphics/ga_cube_component.h"
 #include "graphics/ga_program.h"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -61,7 +61,8 @@ int main(int argc, const char** argv)
 	ga_entity particle_lua;
 	particle_lua.translate({ 0.0f, 2.0f, 1.0f });
 	ga_lua_component lua_move(&particle_lua, "data/scripts/move.lua");
-	ga_particles_component particle_system(&particle_lua, "data/textures/rpi.png");
+	ga_particles_component particle_system(&particle_lua, "data/textures/default_particle.png");
+	//ga_cube_component cube(&particle_lua, "data/textures/rpi.png");
 	particle_system._draw_gui = true;
 	sim->add_entity(&particle_lua);
 
@@ -85,6 +86,26 @@ int main(int argc, const char** argv)
 
 		// Perform the late update.
 		sim->late_update(&params);
+
+		ga_dynamic_drawcall axes;
+		axes._name = "axes";
+		axes._transform.make_identity();
+		axes._draw_mode = GL_LINES;
+
+		axes._positions = { {0, 0, 0}, {1, 0, 0} };
+		axes._indices = { 0, 1 };
+		axes._color = { 1, 0, 0 };
+		params._dynamic_drawcalls.push_back(axes);
+
+		axes._positions = { { 0, 0, 0 },{ 0, 1, 0 } };
+		axes._indices = { 0, 1 };
+		axes._color = { 0, 1, 0 };
+		params._dynamic_drawcalls.push_back(axes);
+
+		axes._positions = { { 0, 0, 0 },{ 0, 0, 1 } };
+		axes._indices = { 0, 1 };
+		axes._color = { 0, 0, 1 };
+		params._dynamic_drawcalls.push_back(axes);
 
 		// Draw to screen.
 		output->update(&params);

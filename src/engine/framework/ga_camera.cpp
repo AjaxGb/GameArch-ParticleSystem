@@ -61,7 +61,7 @@ void ga_camera::update(ga_frame_params* params)
 	rotation_matrix.rotate(rotation_axis_angle);
 	_transform = rotation_matrix * _transform;
 
-	ga_vec3f eye = _transform.get_translation();
+	ga_vec3f eye = params->_camera_pos = _transform.get_translation();
 	ga_vec3f at = eye + _transform.get_forward();
 	ga_vec3f up = ga_vec3f::y_vector();
 

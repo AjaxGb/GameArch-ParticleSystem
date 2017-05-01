@@ -55,7 +55,7 @@ public:
 
 	virtual bool init() override;
 
-	virtual void bind(const struct ga_mat4f& view_proj, const struct ga_mat4f& transform) override;
+	virtual void bind(const struct ga_mat4f& view, const struct ga_mat4f& proj, const struct ga_mat4f& transform) override;
 
 	virtual void set_color(const struct ga_vec3f& color) override { _color = color; }
 

@@ -200,7 +200,7 @@ bool ga_font_material::init()
 	return true;
 }
 
-void ga_font_material::bind(const ga_mat4f& view_proj, const ga_mat4f& transform)
+void ga_font_material::bind(const ga_mat4f& view, const struct ga_mat4f& proj, const ga_mat4f& transform)
 {
 	ga_uniform mvp_uniform = _program->get_uniform("u_mvp");
 	ga_uniform color_uniform = _program->get_uniform("u_color");
@@ -208,7 +208,7 @@ void ga_font_material::bind(const ga_mat4f& view_proj, const ga_mat4f& transform
 
 	_program->use();
 
-	mvp_uniform.set(transform * view_proj);
+	mvp_uniform.set(transform * view * proj);
 	color_uniform.set(_color);
 	texture_uniform.set(*_texture, 0);
 

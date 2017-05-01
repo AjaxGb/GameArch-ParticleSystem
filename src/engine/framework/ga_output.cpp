@@ -58,25 +58,39 @@ void ga_output::update(ga_frame_params* params)
 	// Compute projection matrices:
 	ga_mat4f perspective;
 	perspective.make_perspective_rh(ga_degrees_to_radians(45.0f), (float)width / (float)height, 0.1f, 10000.0f);
-	ga_mat4f view_perspective = params->_view * perspective;
 
 	ga_mat4f ortho;
 	ortho.make_orthographic(0.0f, (float)width, (float)height, 0.0f, 0.1f, 10000.0f);
 	ga_mat4f view;
 	view.make_lookat_rh(ga_vec3f::z_vector(), -ga_vec3f::z_vector(), ga_vec3f::y_vector());
-	ga_mat4f view_ortho = view * ortho;
 
 	// Draw all static geometry:
 	for (auto& d : params->_static_drawcalls)
 	{
-		d._material->bind(view_perspective, d._transform);
+		d._material->bind(params->_view, perspective, d._transform);
 		glBindVertexArray(d._vao);
 		glDrawElements(d._draw_mode, d._index_count, GL_UNSIGNED_SHORT, 0);
 	}
 
 	// Draw all dynamic geometry:
-	draw_dynamic(params->_dynamic_drawcalls, view_perspective);
-	draw_dynamic(params->_gui_drawcalls, view_ortho);
+	draw_dynamic(params->_dynamic_drawcalls, params->_view, perspective);
+
+	// Draw all instanced geometry:
+	for (auto& d : params->_instanced_drawcalls)
+	{
+		d._material->bind(params->_view, perspective, d._transform);
+		glBindVertexArray(d._vao);
+		for (auto& s : d._streams)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, s._vbo);
+			glBufferData(GL_ARRAY_BUFFER, s._max_size, NULL, GL_STREAM_DRAW); // Buffer orphaning
+			glBufferSubData(GL_ARRAY_BUFFER, 0, s._curr_size, s._source);
+		}
+		glDrawElementsInstanced(d._draw_mode, d._index_count, GL_UNSIGNED_SHORT, 0, d._instance_count);
+	}
+
+	// Draw all GUI geometry:
+	draw_dynamic(params->_gui_drawcalls, view, ortho);
 
 	GLenum error = glGetError();
 	assert(error == GL_NONE);
@@ -85,19 +99,19 @@ void ga_output::update(ga_frame_params* params)
 	SDL_GL_SwapWindow(static_cast<SDL_Window* >(_window));
 }
 
-void ga_output::draw_dynamic(const std::vector<ga_dynamic_drawcall>& drawcalls, const ga_mat4f& view_proj)
+void ga_output::draw_dynamic(const std::vector<ga_dynamic_drawcall>& drawcalls, const ga_mat4f& view, const ga_mat4f& proj)
 {
 	for (auto& d : drawcalls)
 	{
 		if (d._material)
 		{
 			d._material->set_color(d._color);
-			d._material->bind(view_proj, d._transform);
+			d._material->bind(view, proj, d._transform);
 		}
 		else
 		{
 			_default_material->set_color(d._color);
-			_default_material->bind(view_proj, d._transform);
+			_default_material->bind(view, proj, d._transform);
 		}
 
 		GLuint vao;

@@ -73,14 +73,14 @@ bool ga_unlit_texture_material::init()
 	return true;
 }
 
-void ga_unlit_texture_material::bind(const ga_mat4f& view_proj, const ga_mat4f& transform)
+void ga_unlit_texture_material::bind(const ga_mat4f& view, const ga_mat4f& proj, const ga_mat4f& transform)
 {
 	ga_uniform mvp_uniform = _program->get_uniform("u_mvp");
 	ga_uniform texture_uniform = _program->get_uniform("u_texture");
 
 	_program->use();
 
-	mvp_uniform.set(transform * view_proj);
+	mvp_uniform.set(transform * view * proj);
 	texture_uniform.set(*_texture, 0);
 
 	glDisable(GL_BLEND);
@@ -127,14 +127,14 @@ bool ga_constant_color_material::init()
 	return true;
 }
 
-void ga_constant_color_material::bind(const ga_mat4f& view_proj, const ga_mat4f& transform)
+void ga_constant_color_material::bind(const ga_mat4f& view, const ga_mat4f& proj, const ga_mat4f& transform)
 {
 	ga_uniform mvp_uniform = _program->get_uniform("u_mvp");
 	ga_uniform color_uniform = _program->get_uniform("u_color");
 
 	_program->use();
 
-	mvp_uniform.set(transform * view_proj);
+	mvp_uniform.set(transform * view * proj);
 	color_uniform.set(_color);
 
 	glDisable(GL_BLEND);

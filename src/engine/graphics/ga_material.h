@@ -17,6 +17,8 @@
 
 #include <string>
 
+void load_shader(const char* filename, std::string& contents);
+
 /*
 ** Base class for all graphical materials.
 ** Includes the shaders and other state necessary to draw geometry.
@@ -26,7 +28,7 @@ class ga_material
 public:
 	virtual bool init() = 0;
 
-	virtual void bind(const ga_mat4f& view_proj, const ga_mat4f& transform) = 0;
+	virtual void bind(const ga_mat4f& view, const ga_mat4f& proj, const ga_mat4f& transform) = 0;
 
 	virtual void set_color(const ga_vec3f& color) {}
 };
@@ -42,7 +44,7 @@ public:
 
 	virtual bool init() override;
 
-	virtual void bind(const ga_mat4f& view_proj, const ga_mat4f& transform) override;
+	virtual void bind(const ga_mat4f& view, const ga_mat4f& proj, const ga_mat4f& transform) override;
 
 private:
 	std::string _texture_file;
@@ -64,7 +66,7 @@ public:
 
 	virtual bool init() override;
 
-	virtual void bind(const ga_mat4f& view_proj, const ga_mat4f& transform) override;
+	virtual void bind(const ga_mat4f& view, const ga_mat4f& proj, const ga_mat4f& transform) override;
 
 	virtual void set_color(const ga_vec3f& color) override { _color = color; }
 

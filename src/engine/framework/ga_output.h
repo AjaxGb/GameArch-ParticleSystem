@@ -27,7 +27,7 @@ public:
 	void update(struct ga_frame_params* params);
 
 private:
-	void draw_dynamic(const std::vector<ga_dynamic_drawcall>& drawcalls, const ga_mat4f& view_proj);
+	void draw_dynamic(const std::vector<ga_dynamic_drawcall>& drawcalls, const ga_mat4f& view, const ga_mat4f& proj);
 
 	void* _window;
 

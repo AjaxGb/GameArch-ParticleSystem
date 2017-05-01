@@ -12,7 +12,7 @@
 #include "framework/ga_frame_params.h"
 #include "ga_font.h"
 
-ga_checkbox::ga_checkbox(bool state, const char* text, float x, float y, ga_frame_params* params)
+ga_checkbox::ga_checkbox(bool state, float x, float y, ga_frame_params* params)
 {
 	float left   = x;
 	float right  = x + 13;
@@ -53,11 +53,6 @@ ga_checkbox::ga_checkbox(bool state, const char* text, float x, float y, ga_fram
 	while (params->_gui_drawcall_lock.test_and_set(std::memory_order_acquire)) {}
 	params->_gui_drawcalls.push_back(drawcall);
 	params->_gui_drawcall_lock.clear(std::memory_order_release);
-	
-	// DRAW TEXT
-
-	extern ga_font* g_font;
-	g_font->print(params, text, right + 3, bottom - 1, k_color_text);
 
 	if (clicked) state = !state;
 	_checked = state;
@@ -91,6 +86,15 @@ ga_checkbox::ga_checkbox(bool state, const char* text, float x, float y, ga_fram
 		params->_gui_drawcalls.push_back(drawcall);
 		params->_gui_drawcall_lock.clear(std::memory_order_release);
 	}
+}
+
+ga_checkbox::ga_checkbox(bool state, const char* text, float x, float y, ga_frame_params* params)
+	: ga_checkbox::ga_checkbox(state, x, y, params)
+{
+	// DRAW TEXT
+
+	extern ga_font* g_font;
+	g_font->print(params, text, x + 16, y + 12, k_color_text);
 }
 
 bool ga_checkbox::get_checked() const
