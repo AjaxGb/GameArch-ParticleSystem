@@ -95,6 +95,7 @@ private:
 
 	int _max_particles;
 	int _last_used;
+	int _last_count = 0;
 
 	int find_unused_particle();
 

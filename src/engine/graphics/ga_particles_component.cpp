@@ -129,6 +129,7 @@ void ga_particles_component::update(ga_frame_params * params)
 			p._camera_dist = -1;
 		}
 	}
+	_last_count = particle_count;
 
 	if (!_material->_additive_blending)
 	{
@@ -259,6 +260,7 @@ void ga_particles_component::draw_gui(struct ga_frame_params* params)
 
 	ga_label("Emitting:", curr_x, curr_y + text_offset, params);
 	_emitting = ga_checkbox(_emitting, curr_x + label_width, curr_y + checkbox_offset, params).get_checked();
+	ga_label(itoa(_last_count, integer_text, 10), curr_x + label_width + 40, curr_y + text_offset + 2, params);
 	curr_y += line_height;
 
 	curr_y += 10;
